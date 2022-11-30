@@ -5,7 +5,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // get all products
 router.get('/', async (req, res) => { try{
-  const getProduct= await Product.findAll({include:[{model:Category},{model:Tag}]})
+  const getProduct= await Product.findAll({include:[{model:Category}]})
 
   res.status(200).json(getProduct);
 } catch(err){
@@ -33,13 +33,17 @@ router.get('/:id', async (req, res) => {try{
 });
 
 // create new product
-router.post('/', (req, res) => { Product.create({
-  product_name: req.body.product_name,
-  price: req.body.price,
-  stock: req.body.price,
-  Category_id: req.body.Category_id,
-  tagIds: req.body.tag_id
-})
+router.post('/', (req, res) => { 
+
+
+  Product.create(req.body,{include:[{model:Tag}]})
+//   Product.create({
+//   product_name: req.body.product_name,
+//   price: req.body.price,
+//   stock: req.body.price,
+//   Category_id: req.body.Category_id,
+//   tagIds: req.body.tag_id
+// })
   /* req.body should look like this...
     {
       product_name: "Basketball",
@@ -116,10 +120,10 @@ router.delete('/:id', async (req, res) => { try{
     where:{id:req.params.id}
   }) 
   if(!deleteProduct){
-    req.status(404).json({message:"Invalid Id"})
-  } req.status(200).json(deleteProduct);
+    res.status(404).json({message:"Invalid Id"})
+  } res.status(200).json(deleteProduct);
 } catch(err){
-  req.status(500).json(err);
+  res.status(500).json(err);
 }
   // delete one product by its `id` value
 });

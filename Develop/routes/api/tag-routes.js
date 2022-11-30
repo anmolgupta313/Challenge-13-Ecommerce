@@ -16,7 +16,7 @@ router.get('/', async (req, res) => { try{
 
 router.get('/:id', async (req, res) => { try{
   const getTagId= await Tag.findByPk(req.params.id ,{
-    include:[{model:Product},{model:ProductTag}]
+    include:[{model:Product}]
   })
 if(!getTagId){
   res.status(404).json({message:"Invalid Id"})
